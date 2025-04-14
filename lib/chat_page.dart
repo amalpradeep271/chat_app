@@ -8,6 +8,8 @@ class ChatPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // leading: Icon(Icons.arrow_back_ios_new_sharp, color: Colors.white),
+        automaticallyImplyLeading: false,
         title: Row(
           children: [
             CircleAvatar(backgroundImage: NetworkImage('')),
