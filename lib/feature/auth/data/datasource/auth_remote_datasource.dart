@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:chat_app/feature/auth/data/models/user_model.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 class AuthRemoteDatasource {
-  final String baseUrl = "http://localhost:6000/auth";
+  final String baseUrl = "http://192.168.1.102:6000/auth";
 
   Future<UserModel> login({
     required String email,
@@ -16,7 +17,7 @@ class AuthRemoteDatasource {
       body: jsonEncode({'email': email, 'password': password}),
       headers: {'Content-Type': 'application/json'},
     );
-    return UserModel.fromJson(jsonDecode(response.body));
+    return UserModel.fromJson(jsonDecode(response.body)['user']);
   }
 
   Future<UserModel> register({
@@ -25,7 +26,7 @@ class AuthRemoteDatasource {
     required String password,
   }) async {
     final response = await http.post(
-      Uri.parse("$baseUrl/login"),
+      Uri.parse("$baseUrl/register"),
       body: jsonEncode({
         'username': username,
         'email': email,
@@ -33,6 +34,7 @@ class AuthRemoteDatasource {
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    return UserModel.fromJson(jsonDecode(response.body));
+    log(response.statusCode.toString());
+    return UserModel.fromJson(jsonDecode(response.body)['user']);
   }
 }

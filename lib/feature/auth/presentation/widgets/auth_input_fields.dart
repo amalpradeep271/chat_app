@@ -14,7 +14,7 @@ class AuthInputFields extends StatelessWidget {
     required this.icon,
     required this.hintText,
     required this.controller,
-    required this.isPassword,
+    this.isPassword = false,
   });
 
   @override
