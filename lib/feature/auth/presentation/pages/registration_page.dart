@@ -87,7 +87,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
               AuthPrompt(
                 text1: "Already have an account?",
                 text2: "Click here to Login",
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/login');
+                },
               ),
             ],
           ),
