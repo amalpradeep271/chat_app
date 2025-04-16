@@ -3,7 +3,7 @@ import 'package:chat_app/feature/conversations/data/datasource/conversation_remo
 import 'package:chat_app/feature/conversations/presentation/pages/conversation_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:chat_app/chat_page.dart';
+import 'package:chat_app/feature/chat/presentation/pages/chat_page.dart';
 import 'package:chat_app/feature/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:chat_app/feature/conversations/data/repositories/conversations_repository_impl.dart';
 import 'package:chat_app/feature/conversations/domain/usecases/fetch_conversation_usecase.dart';

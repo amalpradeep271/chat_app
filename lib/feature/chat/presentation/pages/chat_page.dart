@@ -1,8 +1,32 @@
-import 'package:chat_app/core/theme.dart';
-import 'package:flutter/material.dart';
+// ignore_for_file: depend_on_referenced_packages
 
-class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
+import 'package:chat_app/core/theme.dart';
+import 'package:chat_app/feature/chat/presentation/bloc/chat_event.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+class ChatPage extends StatefulWidget {
+  final String conversationId;
+  const ChatPage({super.key, required this.conversationId});
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  final TextEditingController _messageController = TextEditingController();
+  final _storage = FlutterSecureStorage();
+  String userId = '';
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BlocProvider.of<ChatBloc>(context).add(LoadMessageEvent(widget.conversationId));
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
