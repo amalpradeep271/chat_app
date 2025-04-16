@@ -1,14 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:chat_app/core/theme.dart';
-import 'package:chat_app/feature/chat/presentation/bloc/chat_event.dart';
+import 'package:chat_app/feature/chat/presentation/bloc/chat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:chat_app/core/theme.dart';
+import 'package:chat_app/feature/chat/presentation/bloc/chat_bloc.dart';
+import 'package:chat_app/feature/chat/presentation/bloc/chat_event.dart';
+
 class ChatPage extends StatefulWidget {
   final String conversationId;
-  const ChatPage({super.key, required this.conversationId});
+  final String mate;
+  const ChatPage({super.key, required this.conversationId, required this.mate});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -19,25 +24,54 @@ class _ChatPageState extends State<ChatPage> {
   final _storage = FlutterSecureStorage();
   String userId = '';
 
-@override
+  @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    BlocProvider.of<ChatBloc>(context).add(LoadMessageEvent(widget.conversationId));
+    BlocProvider.of<ChatBloc>(
+      context,
+    ).add(LoadMessageEvent(widget.conversationId));
+    fetchUserId();
   }
 
+  fetchUserId() async {
+    userId = await _storage.read(key: 'userId') ?? '';
+    setState(() {
+      userId = userId;
+    });
+  }
 
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  void _sendMessage() {
+    final content = _messageController.text.trim();
+    if (content.isNotEmpty) {
+      BlocProvider.of<ChatBloc>(
+        context,
+      ).add(SendMessageEvent(widget.conversationId, content));
+      _messageController.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios),
+          color: Colors.white,
+        ),
         title: Row(
           children: [
-            CircleAvatar(backgroundImage: NetworkImage('')),
+            CircleAvatar(backgroundImage: NetworkImage('https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg')),
             SizedBox(width: 10),
-            Text('Amal', style: Theme.of(context).textTheme.titleMedium),
+            Text(widget.mate, style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
         backgroundColor: Colors.transparent,
@@ -47,12 +81,29 @@ class _ChatPageState extends State<ChatPage> {
       body: Column(
         children: [
           Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(20),
-              children: [
-                _buildReceivedMessage(context, 'Received Text'),
-                _buildSendMessage(context, "sended"),
-              ],
+            child: BlocBuilder<ChatBloc, ChatState>(
+              builder: (context, state) {
+                if (state is ChatLoadingState) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (state is ChatLoadedState) {
+                  return ListView.builder(
+                    padding: EdgeInsets.all(20),
+                    itemCount: state.messages.length,
+                    itemBuilder: (context, index) {
+                      final message = state.messages[index];
+                      final isSentMessage = message.senderId == userId;
+                      if (isSentMessage) {
+                        return _buildSendMessage(context, message.content);
+                      } else {
+                        return _buildReceivedMessage(context, message.content);
+                      }
+                    },
+                  );
+                } else if (state is ChatErrorState) {
+                  return Center(child: Text(state.message));
+                }
+                return Center(child: Text('No messages found'));
+              }, //,
             ),
           ),
           _buildMessageInput(),
@@ -108,6 +159,7 @@ class _ChatPageState extends State<ChatPage> {
           SizedBox(width: 10),
           Expanded(
             child: TextFormField(
+              controller: _messageController,
               decoration: InputDecoration(
                 hintText: "Message",
                 hintStyle: TextStyle(color: Colors.grey),
@@ -119,7 +171,7 @@ class _ChatPageState extends State<ChatPage> {
           SizedBox(width: 10),
           GestureDetector(
             child: Icon(Icons.send, color: Colors.grey),
-            onTap: () {},
+            onTap: _sendMessage,
           ),
         ],
       ),

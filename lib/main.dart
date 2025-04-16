@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app/feature/chat/data/datasources/messages_remote_datasource.dart';
+import 'package:chat_app/feature/chat/data/repository/messages_repository_impl.dart';
+import 'package:chat_app/feature/chat/domain/usecase/fetch_message_usecase.dart';
+import 'package:chat_app/feature/chat/presentation/bloc/chat_bloc.dart';
 import 'package:chat_app/feature/conversations/data/datasource/conversation_remote_data_source.dart';
 import 'package:chat_app/feature/conversations/presentation/pages/conversation_page.dart';
 import 'package:flutter/material.dart';
-
-import 'package:chat_app/feature/chat/presentation/pages/chat_page.dart';
 import 'package:chat_app/feature/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:chat_app/feature/conversations/data/repositories/conversations_repository_impl.dart';
 import 'package:chat_app/feature/conversations/domain/usecases/fetch_conversation_usecase.dart';
@@ -26,10 +28,14 @@ void main() {
   final conversationRepository = ConversationsRepositoryImpl(
     remoteDataSource: ConversationRemoteDataSource(),
   );
+  final messagesRepository = MessagesRepositoryImpl(
+    remoteDatasource: MessagesRemoteDatasource(),
+  );
   runApp(
     MyApp(
       authRepositoryImpl: authRepository,
       conversationsRepositoryImpl: conversationRepository,
+      messagesRepositoryImpl: messagesRepository,
     ),
   );
 }
@@ -37,10 +43,12 @@ void main() {
 class MyApp extends StatelessWidget {
   final AuthRepositoryImpl authRepositoryImpl;
   final ConversationsRepositoryImpl conversationsRepositoryImpl;
+  final MessagesRepositoryImpl messagesRepositoryImpl;
   const MyApp({
     super.key,
     required this.authRepositoryImpl,
     required this.conversationsRepositoryImpl,
+    required this.messagesRepositoryImpl,
   });
 
   @override
@@ -62,16 +70,24 @@ class MyApp extends StatelessWidget {
                 FetchConversationUsecase(conversationsRepositoryImpl),
               ),
         ),
+        BlocProvider(
+          create:
+              (_) => ChatBloc(
+                fetchMessageUsecase: FetchMessageUsecase(
+                  messageRepository: messagesRepositoryImpl,
+                ),
+              ),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Chat App',
         theme: AppTheme.darkTheme,
-        home: ConversationPage(),
+        home: LoginPage(),
         routes: {
           '/login': (_) => LoginPage(),
           '/register': (_) => RegistrationPage(),
-          '/chatpage': (_) => ChatPage(),
+          // '/chatpage': (_) => ChatPage(),
           '/conversationpage': (_) => ConversationPage(),
         },
       ),

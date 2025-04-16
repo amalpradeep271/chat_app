@@ -1,4 +1,5 @@
 import 'package:chat_app/core/theme.dart';
+import 'package:chat_app/feature/chat/presentation/pages/chat_page.dart';
 import 'package:chat_app/feature/conversations/presentation/bloc/conversations_bloc.dart';
 import 'package:chat_app/feature/conversations/presentation/bloc/conversations_event.dart';
 import 'package:chat_app/feature/conversations/presentation/bloc/conversations_state.dart';
@@ -68,10 +69,24 @@ class _ConversationPageState extends State<ConversationPage> {
                     return ListView.builder(
                       itemBuilder: (context, index) {
                         final conversation = state.conversations[index];
-                        return _buildMessageTile(
-                          conversation.lastMessage,
-                          conversation.participantName,
-                          conversation.lastMessageTime.toString(),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => ChatPage(
+                                      conversationId: conversation.id,
+                                      mate: conversation.participantName,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: _buildMessageTile(
+                            conversation.lastMessage,
+                            conversation.participantName,
+                            conversation.lastMessageTime.toString(),
+                          ),
                         );
                       },
                       itemCount: state.conversations.length,
@@ -92,7 +107,12 @@ class _ConversationPageState extends State<ConversationPage> {
   Widget _buildMessageTile(String message, String name, String time) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      leading: CircleAvatar(radius: 30, backgroundImage: NetworkImage('')),
+      leading: CircleAvatar(
+        radius: 30,
+        backgroundImage: NetworkImage(
+          'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+        ),
+      ),
       title: Text(
         name,
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -111,7 +131,12 @@ class _ConversationPageState extends State<ConversationPage> {
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          CircleAvatar(radius: 30, backgroundImage: NetworkImage('')),
+          CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(
+              'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+            ),
+          ),
           SizedBox(height: 5),
           Text(name, style: Theme.of(context).textTheme.bodyMedium),
         ],
