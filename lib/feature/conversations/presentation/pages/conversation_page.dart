@@ -110,7 +110,7 @@ class _ConversationPageState extends State<ConversationPage> {
       leading: CircleAvatar(
         radius: 30,
         backgroundImage: NetworkImage(
-          'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+          'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
         ),
       ),
       title: Text(
@@ -134,7 +134,7 @@ class _ConversationPageState extends State<ConversationPage> {
           CircleAvatar(
             radius: 30,
             backgroundImage: NetworkImage(
-              'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg',
+              'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
             ),
           ),
           SizedBox(height: 5),

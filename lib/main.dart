@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app/core/socket_service.dart';
 import 'package:chat_app/feature/chat/data/datasources/messages_remote_datasource.dart';
 import 'package:chat_app/feature/chat/data/repository/messages_repository_impl.dart';
 import 'package:chat_app/feature/chat/domain/usecase/fetch_message_usecase.dart';
@@ -21,7 +22,10 @@ import 'package:chat_app/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:chat_app/feature/auth/presentation/pages/login_page.dart';
 import 'package:chat_app/feature/auth/presentation/pages/registration_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final socketService = SocketService();
+  await socketService.initSocket();
   final authRepository = AuthRepositoryImpl(
     authRemoteDatasource: AuthRemoteDatasource(),
   );

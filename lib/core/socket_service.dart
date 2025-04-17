@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:developer';
+import 'package:chat_app/core/appurls.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -21,7 +22,7 @@ class SocketService {
       log('[SOCKET] Initializing with token: $token');
 
       _socket = IO.io(
-        'http://192.168.1.102:6000',
+        Appurls.baseUrl,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .disableAutoConnect()

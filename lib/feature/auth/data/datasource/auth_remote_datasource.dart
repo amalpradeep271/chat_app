@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:chat_app/core/appurls.dart';
 import 'package:chat_app/feature/auth/data/models/user_model.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 class AuthRemoteDatasource {
-  final String baseUrl = "http://192.168.1.102:6000/auth";
+  final String baseUrl = "${Appurls.baseUrl}/auth";
 
   Future<UserModel> login({
     required String email,

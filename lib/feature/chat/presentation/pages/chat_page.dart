@@ -69,7 +69,11 @@ class _ChatPageState extends State<ChatPage> {
         ),
         title: Row(
           children: [
-            CircleAvatar(backgroundImage: NetworkImage('https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg')),
+            CircleAvatar(
+              backgroundImage: NetworkImage(
+                'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
+              ),
+            ),
             SizedBox(width: 10),
             Text(widget.mate, style: Theme.of(context).textTheme.titleMedium),
           ],
