@@ -1,5 +1,6 @@
 import 'package:chat_app/core/theme.dart';
 import 'package:chat_app/feature/chat/presentation/pages/chat_page.dart';
+import 'package:chat_app/feature/contacts/presentation/pages/contacts_page.dart';
 import 'package:chat_app/feature/conversations/presentation/bloc/conversations_bloc.dart';
 import 'package:chat_app/feature/conversations/presentation/bloc/conversations_event.dart';
 import 'package:chat_app/feature/conversations/presentation/bloc/conversations_state.dart';
@@ -25,9 +26,15 @@ class _ConversationPageState extends State<ConversationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        shape: CircleBorder(),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ContactsPage()),
+          );
+        },
         backgroundColor: DefaultColors.buttonColor,
-        child: Icon(Icons.contacts),
+        child: Icon(Icons.contacts, color: Colors.white),
       ),
       appBar: AppBar(
         title: Text('Messages', style: Theme.of(context).textTheme.titleLarge),

@@ -11,4 +11,9 @@ class ConversationsRepositoryImpl implements ConversationRepository {
   Future<List<ConversationEntity>> fetchConversations() async {
     return await remoteDataSource.fetchConversations();
   }
+  
+  @override
+  Future<String> checkOrCreateConversation({required String contactId})async {
+  return await remoteDataSource.checkOrCreateConversations(contactId:contactId);
+  }
 }

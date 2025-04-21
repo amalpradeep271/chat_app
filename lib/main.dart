@@ -4,7 +4,13 @@ import 'package:chat_app/feature/chat/data/datasources/messages_remote_datasourc
 import 'package:chat_app/feature/chat/data/repository/messages_repository_impl.dart';
 import 'package:chat_app/feature/chat/domain/usecase/fetch_message_usecase.dart';
 import 'package:chat_app/feature/chat/presentation/bloc/chat_bloc.dart';
+import 'package:chat_app/feature/contacts/data/datasource/contact_remote_datasource.dart';
+import 'package:chat_app/feature/contacts/data/repository/contacts_repository_impl.dart';
+import 'package:chat_app/feature/contacts/domain/usecase/add_contacts_usecase.dart';
+import 'package:chat_app/feature/contacts/domain/usecase/fetch_contacts_usecase.dart';
+import 'package:chat_app/feature/contacts/presentation/bloc/contacts_bloc.dart';
 import 'package:chat_app/feature/conversations/data/datasource/conversation_remote_data_source.dart';
+import 'package:chat_app/feature/conversations/domain/usecases/check_or_create_conversation_usecase.dart';
 import 'package:chat_app/feature/conversations/presentation/pages/conversation_page.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/feature/auth/data/datasource/auth_remote_datasource.dart';
@@ -35,8 +41,12 @@ void main() async {
   final messagesRepository = MessagesRepositoryImpl(
     remoteDatasource: MessagesRemoteDatasource(),
   );
+  final contactsRepository = ContactsRepositoryImpl(
+    remoteDatasource: ContactRemoteDatasource(),
+  );
   runApp(
     MyApp(
+      contactsRepositoryImpl: contactsRepository,
       authRepositoryImpl: authRepository,
       conversationsRepositoryImpl: conversationRepository,
       messagesRepositoryImpl: messagesRepository,
@@ -48,11 +58,13 @@ class MyApp extends StatelessWidget {
   final AuthRepositoryImpl authRepositoryImpl;
   final ConversationsRepositoryImpl conversationsRepositoryImpl;
   final MessagesRepositoryImpl messagesRepositoryImpl;
+  final ContactsRepositoryImpl contactsRepositoryImpl;
   const MyApp({
     super.key,
     required this.authRepositoryImpl,
     required this.conversationsRepositoryImpl,
     required this.messagesRepositoryImpl,
+    required this.contactsRepositoryImpl,
   });
 
   @override
@@ -80,6 +92,21 @@ class MyApp extends StatelessWidget {
                 fetchMessageUsecase: FetchMessageUsecase(
                   messageRepository: messagesRepositoryImpl,
                 ),
+              ),
+        ),
+        BlocProvider(
+          create:
+              (_) => ContactsBloc(
+                fetchContactsUsecase: FetchContactsUsecase(
+                  contactsRepository: contactsRepositoryImpl,
+                ),
+                addContactsUsecase: AddContactsUsecase(
+                  contactsRepository: contactsRepositoryImpl,
+                ),
+                checkOrCreateConversationUsecase:
+                    CheckOrCreateConversationUsecase(
+                      repository: conversationsRepositoryImpl,
+                    ),
               ),
         ),
       ],

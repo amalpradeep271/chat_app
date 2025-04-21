@@ -33,7 +33,10 @@ class ContactRemoteDatasource {
     final response = await http.post(
       Uri.parse('${Appurls.baseUrl}/contacts'),
       body: jsonEncode({'contactEmail': email}),
-      headers: {'Authorization': 'Bearer $token'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
     );
 
     if (response.statusCode != 201) {
