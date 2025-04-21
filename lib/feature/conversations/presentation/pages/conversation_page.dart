@@ -24,6 +24,11 @@ class _ConversationPageState extends State<ConversationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: DefaultColors.buttonColor,
+        child: Icon(Icons.contacts),
+      ),
       appBar: AppBar(
         title: Text('Messages', style: Theme.of(context).textTheme.titleLarge),
         centerTitle: false,
