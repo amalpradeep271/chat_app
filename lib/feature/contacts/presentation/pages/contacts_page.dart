@@ -2,6 +2,7 @@ import 'package:chat_app/feature/chat/presentation/pages/chat_page.dart';
 import 'package:chat_app/feature/contacts/presentation/bloc/contacts_bloc.dart';
 import 'package:chat_app/feature/contacts/presentation/bloc/contacts_event.dart';
 import 'package:chat_app/feature/contacts/presentation/bloc/contacts_state.dart';
+import 'package:chat_app/feature/conversations/presentation/pages/conversation_page.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ class _ContactsPageState extends State<ContactsPage> {
   @override
   void initState() {
     super.initState();
+    // final currentState = BlocProvider.of<ContactsBloc>(context).state;
     BlocProvider.of<ContactsBloc>(context).add(FetchContacts());
   }
 
@@ -24,15 +26,27 @@ class _ContactsPageState extends State<ContactsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => ConversationPage()),
+              (route) => false,
+            );
+          },
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
         title: Text('Contacts', style: Theme.of(context).textTheme.titleLarge),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
       body: BlocListener<ContactsBloc, ContactsState>(
-        listener: (context, state) {
+        listener: (context, state) async {
+          final contactsBloc = BlocProvider.of<ContactsBloc>(context);
+
           if (state is ConversationReady) {
-            Navigator.push(
+            var res = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder:
@@ -42,6 +56,9 @@ class _ContactsPageState extends State<ContactsPage> {
                     ),
               ),
             );
+            if (res == null) {
+              contactsBloc.add(FetchContacts());
+            }
           }
         },
         child: BlocBuilder<ContactsBloc, ContactsState>(

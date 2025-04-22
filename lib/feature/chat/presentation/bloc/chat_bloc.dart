@@ -33,6 +33,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       _messages.addAll(messages);
       emit(ChatLoadedState(List.from(_messages)));
 
+      _socketService.socket.off('newMessage');
+
       // Join the socket room for this conversation
       log('[SOCKET] Joining conversation: ${event.conversationId}');
       _socketService.socket.emit('joinConversation', event.conversationId);
