@@ -52,7 +52,8 @@ class _ContactsPageState extends State<ContactsPage> {
                 builder:
                     (context) => ChatPage(
                       conversationId: state.conversationId,
-                      mate: state.contactName,
+                      mate: state.contact.username,
+                      profileImage: state.contact.profileImage,
                     ),
               ),
             );
@@ -81,10 +82,7 @@ class _ContactsPageState extends State<ContactsPage> {
                     ),
                     onTap: () {
                       BlocProvider.of<ContactsBloc>(context).add(
-                        CheckOrCreateConversationEvent(
-                          contact.id,
-                          contact.username,
-                        ),
+                        CheckOrCreateConversationEvent(contact.id, contact),
                       );
                     },
                   );

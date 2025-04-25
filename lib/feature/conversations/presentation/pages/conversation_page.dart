@@ -56,10 +56,10 @@ class _ConversationPageState extends State<ConversationPage> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                _buildRecentContact(context, 'Amal'),
-                _buildRecentContact(context, 'Alan'),
-                _buildRecentContact(context, 'Kevin'),
-                _buildRecentContact(context, 'Jansar'),
+                _buildRecentContact(context, 'Amal', ''),
+                _buildRecentContact(context, 'Alan', ''),
+                _buildRecentContact(context, 'Kevin', ''),
+                _buildRecentContact(context, 'Jansar', ''),
               ],
             ),
           ),
@@ -90,6 +90,8 @@ class _ConversationPageState extends State<ConversationPage> {
                                     (context) => ChatPage(
                                       conversationId: conversation.id,
                                       mate: conversation.participantName,
+                                      profileImage:
+                                          conversation.participantImage,
                                     ),
                               ),
                             );
@@ -97,6 +99,7 @@ class _ConversationPageState extends State<ConversationPage> {
                           child: _buildMessageTile(
                             conversation.lastMessage,
                             conversation.participantName,
+                            conversation.participantImage,
                             conversation.lastMessageTime.toString(),
                           ),
                         );
@@ -116,15 +119,15 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 
-  Widget _buildMessageTile(String message, String name, String time) {
+  Widget _buildMessageTile(
+    String message,
+    String name,
+    String image,
+    String time,
+  ) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      leading: CircleAvatar(
-        radius: 30,
-        backgroundImage: NetworkImage(
-          'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
-        ),
-      ),
+      leading: CircleAvatar(radius: 30, backgroundImage: NetworkImage(image)),
       title: Text(
         name,
         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -138,17 +141,12 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 
-  Widget _buildRecentContact(BuildContext context, String name) {
+  Widget _buildRecentContact(BuildContext context, String name, String image) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundImage: NetworkImage(
-              'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
-            ),
-          ),
+          CircleAvatar(radius: 30, backgroundImage: NetworkImage(image)),
           SizedBox(height: 5),
           Text(name, style: Theme.of(context).textTheme.bodyMedium),
         ],

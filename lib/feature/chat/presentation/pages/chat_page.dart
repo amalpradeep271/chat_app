@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:chat_app/feature/chat/presentation/bloc/chat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,11 +8,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:chat_app/core/theme.dart';
 import 'package:chat_app/feature/chat/presentation/bloc/chat_bloc.dart';
 import 'package:chat_app/feature/chat/presentation/bloc/chat_event.dart';
+import 'package:chat_app/feature/chat/presentation/bloc/chat_state.dart';
 
 class ChatPage extends StatefulWidget {
   final String conversationId;
   final String mate;
-  const ChatPage({super.key, required this.conversationId, required this.mate});
+  final String profileImage;
+  const ChatPage({
+    super.key,
+    required this.conversationId,
+    required this.mate,
+    required this.profileImage,
+  });
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -69,11 +75,7 @@ class _ChatPageState extends State<ChatPage> {
         ),
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                'https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg',
-              ),
-            ),
+            CircleAvatar(backgroundImage: NetworkImage(widget.profileImage)),
             SizedBox(width: 10),
             Text(widget.mate, style: Theme.of(context).textTheme.titleMedium),
           ],

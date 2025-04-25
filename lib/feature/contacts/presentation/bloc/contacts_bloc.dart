@@ -29,7 +29,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       emit(ContactsLoading());
  
       final conversationId = await checkOrCreateConversationUsecase(contactId: event.contactId);
-      emit(ConversationReady(conversationId:conversationId, contactName:event.contactName));
+      emit(ConversationReady(conversationId:conversationId, contact:event.contact));
     } catch (e) {
       emit(ContactsError('Failed to start conversation'));
     }

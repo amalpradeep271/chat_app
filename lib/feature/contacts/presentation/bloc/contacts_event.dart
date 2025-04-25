@@ -1,3 +1,5 @@
+import 'package:chat_app/feature/contacts/domain/entities/contact_entity.dart';
+
 abstract class ContactsEvent {}
 
 class FetchContacts extends ContactsEvent {}
@@ -9,7 +11,7 @@ class AddContact extends ContactsEvent {
 
 class CheckOrCreateConversationEvent extends ContactsEvent {
   final String contactId;
-  final String contactName;
+  final ContactEntity contact;
 
-  CheckOrCreateConversationEvent(this.contactId, this.contactName);
+  CheckOrCreateConversationEvent(this.contactId, this.contact);
 }
